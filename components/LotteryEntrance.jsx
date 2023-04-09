@@ -18,6 +18,16 @@ export default function LotteryEntrance() {
   const { chainId: chainIdHex, isWeb3Enabled } = useMoralis()
   const chainId = parseInt(chainIdHex)
   const contractAddress = chainId in contractAddresses ? contractAddresses[chainId][0] : null
+  useEffect(() => {
+    if (contractAddress && window.ethereum) {
+      const provider = new ethers.providers.Web3Provider(window.ethereum)
+      const contract = new ethers.Contract(contractAddress, abi, provider)
+      contract.on('WinnerPicked', recentWinner => {
+        console.log(recentWinner)
+        setMemberInfo({ number: 0, recentWinner })
+      })
+    }
+  }, [contractAddress])
   const { runContractFunction: enterRaffle } = useWeb3Contract({
     abi,
     contractAddress,
