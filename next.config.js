@@ -3,6 +3,7 @@ const nextConfig = {
   output: 'export',
   experimental: {
     appDir: true,
+    reactRoot: true,
   },
 }
 
